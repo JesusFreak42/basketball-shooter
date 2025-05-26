@@ -12,39 +12,26 @@ public class BallSpawner : MonoBehaviour
 
     [SerializeField] private Camera cam;
     [SerializeField] private ScoreController scoreController;
-    // [SerializeField] private FlashingButton newGameBtn;
 
     private void Awake(){
         #if UNITY_ANDROID || UNITY_IOS
-        Screen.sleepTimeout = SleepTimeout.NeverSleep; //no sleep for this device
+        Screen.sleepTimeout = SleepTimeout.NeverSleep; //no sleep for this mobile device
         #endif
     }
 
     private void Start(){
-        SpawnNewObject();
+        SpawnNewObject(); //spawn new ball on start
     }
 
     private void SpawnNewObject(){
-        // if (scoreController.GetBalls() <= 0){
-        //     if (!newGameBtn.flashing){
-        //         newGameBtn.flashing = true;
-        //     }
-
-        //     return;
-        // }
-
         if (!scoreController.TimeRemains() && scoreController.TimedMode()){
             return;
         }
 
-        // GameObject nBall = Instantiate(spawnObj, transform.position, Quaternion.identity);
-        GameObject nBall = Instantiate(spawnObj, transform.position, Random.rotation);
-        nBall.GetComponent<DragAndShoot>().SetBallSpawner(this);
+        GameObject nBall = Instantiate(spawnObj, transform.position, Random.rotation); //instantiate the ball here at a random rotation
+        nBall.GetComponent<DragAndShoot>().SetBallSpawner(this); //set props in the child object
         nBall.GetComponent<DragAndShoot>().SetCamera(cam);
-        // scoreController.TakeBalls(1);
         objectsAlive.Add(nBall);
-
-        // newGameBtn.SetButtonInteractable(true);
     }
 
     public void RequestNewSpawn(){
@@ -52,30 +39,22 @@ public class BallSpawner : MonoBehaviour
     }
 
     public void StartNewGame(){
-        for (int i = 0; i < objectsAlive.Count; i++){
+        for (int i = 0; i < objectsAlive.Count; i++){ //destroy objects for new game
             Destroy(objectsAlive[i].gameObject);
         }
-        objectsAlive.Clear();
+        objectsAlive.Clear(); //clear the list
 
-        // newGameBtn.flashing = false;
         scoreController.ResetGame();
-        // RequestNewSpawn();
         SpawnNewObject();
     }
 
     public void RequestNewGame(){
-        // newGameBtn.SetButtonInteractable(false);
-        Invoke("StartNewGame", newSpawnTime);
+        Invoke("StartNewGame", newSpawnTime); //invoke function after time
     }
 
     public void OnTimerBtnClicked(){
         scoreController.FlipTimedMode();
         StartNewGame();
-        // RequestNewGame();
     }
-
-    // public void GoMainMenu(){
-    //     SceneManager.LoadScene("MainMenuScene");
-    // }
 
 }

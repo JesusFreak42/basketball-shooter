@@ -5,18 +5,18 @@ public class SoundController : MonoBehaviour
 {
     
     [SerializeField] private AudioSource musicSource;
-    // [SerializeField] private AudioSource sfxSource;
+    // [SerializeField] private AudioSource sfxSource; //we'll use this if we want to add sound effects in the future
 
-    [SerializeField] private AudioClip music;
+    [SerializeField] private AudioClip music; //the music clip
 
-    private bool muted = false;
-    [SerializeField] private Image muteImg;
-    [SerializeField] private Sprite soundSprite;
-    [SerializeField] private Sprite mutedSprite;
+    private bool muted = false; //whether the game sound is muted
+    [SerializeField] private Image muteImg; //the muted/unmuted UI image
+    [SerializeField] private Sprite soundSprite; //unmuted sprite
+    [SerializeField] private Sprite mutedSprite; //muted sprite
 
     private void Start(){
-        PlayMusic();
-        SetMute(PlayerPrefs.GetInt("soundMuted",0) == 1);
+        PlayMusic(); //initially play music
+        SetMute(PlayerPrefs.GetInt("soundMuted",0) == 1); //set the muted state based on saved player pref, defaulting to unmuted if no saved pref
     }
 
     public void ToggleMute(){
@@ -25,7 +25,7 @@ public class SoundController : MonoBehaviour
 
     private void SetMute(bool m){
         muted = m;
-        PlayerPrefs.SetInt("soundMuted", muted ? 1 : 0);
+        PlayerPrefs.SetInt("soundMuted", muted ? 1 : 0); //save the muted state in player prefs
 
         if (muted){
             muteImg.sprite = mutedSprite;
@@ -40,10 +40,8 @@ public class SoundController : MonoBehaviour
     }
 
     public void PlayMusic(){
-        // if (muted) return;
-
-        musicSource.clip = music;
-        musicSource.Play();
+        musicSource.clip = music; //set the music clip to play
+        musicSource.Play(); //play said music clip
     }
 
 }

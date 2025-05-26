@@ -14,12 +14,12 @@ public class DestroyAfterTime : MonoBehaviour
     // }
 
     private void Update(){
-        if (born && Time.time > (bornTime + liveTime)){
+        if (born && Time.time > (bornTime + liveTime)){ //destroy this object after time
             Destroy(gameObject);
         }
     }
 
-    public void Birthday(){
+    public void Birthday(){ //set this object alive
         born = true;
         bornTime = Time.time;
     }
